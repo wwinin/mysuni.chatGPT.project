@@ -1,0 +1,57 @@
+<?php
+// 유메타랩(프롬프트 엔지니어 코리아)의 챗봇 개발 예제 소스입니다.
+// https://promptengineer.kr / 유메타랩(주)
+// 문의: seo@seowan.net / edu@yumeta.kr
+
+$ch = curl_init();
+$url = 'https://api.openai.com/v1/chat/completions';
+$api_key = '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';
+
+list($prompt, $old_prompt, $old_result) = explode("/////", $_POST['text']);
+
+$post_data = [
+    "model" => "gpt-3.5-turbo-16k",
+    "messages" => [
+        [
+            "role" => "system",
+            "content" => "이 질문과 답변을 보고 '데이터 출처 및 요구' / '데이터 전처리 및 피쳐' / '데이터 분석 및 시각화' / '데이터 평가 및 결과' / '데이터 오류' / '기타'  이 중에서 한가지로 들어갈 카테고리를 말해줘 그리고 핵심 단어 3개를 해시태그를 달아서 출력해줘.  예시 : 핵심단어: #A데이터, #과거, #누적     카테고리: 데이터 전처리 및 피쳐 "
+        ],
+        [
+            "role" => "user",
+            "content" => $prompt
+        ]
+    ],
+    "max_tokens" => 1000,
+    "temperature" => 0.7
+];
+
+$headers = [
+    'Content-Type: application/json',
+    'Authorization: Bearer ' . $api_key
+];
+
+$ch = curl_init();
+curl_setopt($ch, CURLOPT_URL, $url);
+curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
+curl_setopt($ch, CURLOPT_POST, 1);
+curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($post_data));
+curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);
+
+$result = curl_exec($ch);
+if (curl_errno($ch)) {
+    echo 'Error: ' . curl_error($ch);
+}
+curl_close($ch);
+
+$response = json_decode($result);
+$message_content = var_export($response->choices[0]->message->content, true);
+$message = trim($message_content, "'");
+
+$message = str_replace("\n", "<br/>", $message);
+
+if (strpos($message, "NULL") !== false) {
+    echo "<font color=red>서버에 오류가 발생했습니다. 페이지를 새로고침해주세요. $result </font>";
+} else {
+    echo stripslashes($message);
+}
+?>
