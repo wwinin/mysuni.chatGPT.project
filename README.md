@@ -18,7 +18,7 @@ playgound로 api 받기 -> 닷홈 웹호스팅 -> 파일질라 연동 -> 소스�
 - 리스트 정리에 도움
 - 엔지니어용 서비스
 <br>
-(프롬프트에 여러 문장이 쌓일 수록 답변의 이상이 생기기 간단한 명령과 하나의 예시만 추가)
+(프롬프트에 여러 문장이 쌓일 수록 답변의 이상이 생기기에 간단한 명령과 하나의 예시만 추가)
 <br>
 <br>
 <img src="https://github.com/wwinin/mysuni.chatGPT.project/assets/103291492/5d3d43cc-4b7f-4d89-8240-8720aeab23f1.png" width="500" height="400"/>
